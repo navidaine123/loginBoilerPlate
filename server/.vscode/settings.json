@@ -1,0 +1,7 @@
+{
+    "deno.enable": true,
+    "editor.cursorStyle": "line-thin",
+    "editor.tokenColorCustomizations": null,
+    "editor.formatOnType": true,
+    "editor.cursorBlinking": "expand"
+}
