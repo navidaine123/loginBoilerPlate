@@ -15,8 +15,8 @@ const header: Jose = {
 export const home =async (ctx: RouterContext) => {};
 export const login =async (ctx: RouterContext) => {};
 export const register =async (ctx: RouterContext) => {};
-export const protectedRouter =async (ctx: RouterContext) => {
-}
+
+export const protectedRouter =async (ctx: RouterContext) => {}
 export const postLogin =async (ctx: RouterContext) => {
         const body = await ctx.request.body({type:'form-data'});
         const formdata = await body.value.read();

@@ -8,6 +8,9 @@ const app = new Application();
 const router = new Router();
 app.use(usermiddleware);
 
+app.use(router.routes());
+app.use(router.allowedMethods());
+
 router
   .get("/", home)
   .get("/login", login)
@@ -17,8 +20,6 @@ router
   .get("/logout", logout)
   .get("/protected", protectedRouter);
 
-app.use(router.routes());
-app.use(router.allowedMethods());
 
 
 app.addEventListener('error', evt => {

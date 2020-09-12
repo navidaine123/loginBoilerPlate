@@ -8,10 +8,17 @@ const userMiddleware = async (ctx: Context, next: Function) => {
   console.log(jwt);
   if (jwt) {
     const validate = await validateJwt({ jwt, key: "your-secret", algorithm: "HS256" });
-    console.log(validate.jwt);
-    console.log(validate.isValid);
-   console.log(parseAndDecode(validate.jwt + ""))
+    const data = parseAndDecode(validate.jwt + "");
+    console.log(data);
+
+    if(data){
+
+    }
+    else{
+    }
   }
+  
+  await next();
 };
 
 export default userMiddleware;
