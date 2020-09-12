@@ -67,8 +67,6 @@ export const postRegister = async (ctx: RouterContext) => {
         }
 
         users.push(user);
-        console.log(user);
-
 }
 export const logout =async (ctx: RouterContext) => {
 }
