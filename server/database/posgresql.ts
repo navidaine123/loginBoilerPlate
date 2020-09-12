@@ -1,11 +1,11 @@
 import { Database } from "https://deno.land/x/denodb/mod.ts";
 
 const DbContext = new Database("postgres", {
-  database: "zgkptixc",
+  database: "User",
   host:
-    "postgres://zgkptixc:DjYKwd_7pn1Df20HqD-7Nno_JzSmvWSC@lallah.db.elephantsql.com:5432/zgkptixc",
-  username: "zgkptixc",
-  password: "DjYKwd_7pn1Df20HqD-7Nno_JzSmvWSC",
+    "localhost",
+  username: "Navid",
+  password: "navid123agha",
   port: 5432,
 } // optional
 );

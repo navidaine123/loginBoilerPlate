@@ -10,6 +10,7 @@ import {
 } from "./router/route.ts";
 // import router from "../router/route.ts";
 import usermiddleware from "./middleware/usermiddleware.ts";
+import {authMiddleware} from "./middleware/authMiddleware.ts";
 import db from "./database/posgresql.ts";
 import UserModel from "./model/userModel.ts";
 import createDB from "./model/userModel.ts";
@@ -28,7 +29,7 @@ router
   .get("/register", register)
   .post("/register", postRegister)
   .get("/logout", logout)
-  .get("/protected", protectedRouter);
+  .get("/protected",authMiddleware ,protectedRouter);
 
 app.addEventListener("error", (evt) => {
   console.log(evt.error);

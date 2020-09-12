@@ -10,39 +10,44 @@ class User extends Model {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true
     },
 
     FirstName: {
       type: DataTypes.STRING,
       length: 50,
+      allowNull :true
     },
     LastName: {
       type: DataTypes.STRING,
       length: 50,
+      allowNull :true
     },
     UserName: {
       type: DataTypes.STRING,
       length: 50,
+      allowNull :true
     },
     Email: {
       type: DataTypes.STRING,
       length: 50,
+      allowNull :true
     },
     Password: {
       type: DataTypes.STRING,
       length: 50,
+      allowNull :true
     },
   };
 }
 
 export default async function createDB(){
 const context = DbContext;
-console.log('start');
 context.link([User]);
-console.log('link');
 await context.sync({drop: true});
-console.log('sync');
 await User.create({ FirstName: 'Amelia' });
-console.log('create');
+const navid = await User.find(1);
+navid.FirstName = 'navid';
+navid.update();
 console.log(await User.select().all());
 }
