@@ -1,10 +1,20 @@
-import { Application,Router } from "https://deno.land/x/oak@v6.1.0/mod.ts";
-import { home, protectedRouter, login, logout, register, postRegister, postLogin } from "./router/route.ts";
+import { Application, Router } from "https://deno.land/x/oak@v6.1.0/mod.ts";
+import {
+  home,
+  protectedRouter,
+  login,
+  logout,
+  register,
+  postRegister,
+  postLogin,
+} from "./router/route.ts";
 // import router from "../router/route.ts";
-import usermiddleware from "./middleware/usermiddleware.ts"
+import usermiddleware from "./middleware/usermiddleware.ts";
+import db from "./database/posgresql.ts";
+import UserModel from "./model/userModel.ts";
+import createDB from "./model/userModel.ts";
 
 const app = new Application();
-
 const router = new Router();
 app.use(usermiddleware);
 
@@ -20,19 +30,12 @@ router
   .get("/logout", logout)
   .get("/protected", protectedRouter);
 
-
-
-app.addEventListener('error', evt => {
+app.addEventListener("error", (evt) => {
   console.log(evt.error);
 });
 
+createDB();
 await app.listen({ port: 8000 });
 
 const port = 8000;
 console.log(`listen to port :${port}`);
-
-
-
-
-
-
