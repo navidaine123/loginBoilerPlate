@@ -1,13 +1,19 @@
 import { Database } from "https://deno.land/x/denodb/mod.ts";
+import {
+  User,
+} from "../model/userModel.ts";
 
-const DbContext = new Database("postgres", {
+export const DbContext = new Database("postgres", {
   database: "User",
-  host:
-    "localhost",
+  host: "localhost",
   username: "Navid",
   password: "navid123agha",
   port: 5432,
 } // optional
 );
 
-export default DbContext;
+export async function createDB() {
+  const context = DbContext;
+  context.link([User]);
+  await context.sync();
+}

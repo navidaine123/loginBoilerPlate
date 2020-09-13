@@ -1,42 +1,40 @@
 import { Application, Router } from "https://deno.land/x/oak@v6.1.0/mod.ts";
 import {
-  home,
-  protectedRouter,
-  login,
-  logout,
-  register,
-  postRegister,
+  gteUsersList,
+} from "./router/route.userdetails.ts";
+
+import {
+  getLogin,
   postLogin,
-} from "./router/route.ts";
-// import router from "../router/route.ts";
-import usermiddleware from "./middleware/usermiddleware.ts";
-import {authMiddleware} from "./middleware/authMiddleware.ts";
-import db from "./database/posgresql.ts";
-import UserModel from "./model/userModel.ts";
-import createDB from "./model/userModel.ts";
+} from "./router/route.login.ts";
+
+import {
+  getRegister,
+  postRegister,
+} from "./router/route.register.ts";
+
+import authMiddleware from "./middleware/authMiddleware.ts";
+import { createDB } from "./database/posgresql.ts";
 
 const app = new Application();
 const router = new Router();
-app.use(usermiddleware);
 
 app.use(router.routes());
 app.use(router.allowedMethods());
 
 router
-  .get("/", home)
-  .get("/login", login)
+  .get("/login", getLogin)
   .post("/login", postLogin)
-  .get("/register", register)
+  .get("/register", getRegister)
   .post("/register", postRegister)
-  .get("/logout", logout)
-  .get("/protected",authMiddleware ,protectedRouter);
+  .get("/users", gteUsersList);
 
 app.addEventListener("error", (evt) => {
   console.log(evt.error);
 });
 
 createDB();
-await app.listen({ port: 8000 });
 
 const port = 8000;
 console.log(`listen to port :${port}`);
+await app.listen({ port: 8000 });
