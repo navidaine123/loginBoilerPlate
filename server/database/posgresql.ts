@@ -15,5 +15,5 @@ export const DbContext = new Database("postgres", {
 export async function createDB() {
   const context = DbContext;
   context.link([User]);
-  await context.sync();
+  await context.sync({ drop: false });
 }

@@ -1,7 +1,11 @@
 import { Application, Router } from "https://deno.land/x/oak@v6.1.0/mod.ts";
 import {
-  gteUsersList,
-} from "./router/route.userdetails.ts";
+  postCreate,
+  getUsersList,
+  getUser,
+  postupdateUser,
+  delUser,
+} from "./router/route.users.ts";
 
 import {
   getLogin,
@@ -10,7 +14,6 @@ import {
 
 import {
   getRegister,
-  postRegister,
 } from "./router/route.register.ts";
 
 import authMiddleware from "./middleware/authMiddleware.ts";
@@ -26,8 +29,11 @@ router
   .get("/login", getLogin)
   .post("/login", postLogin)
   .get("/register", getRegister)
-  .post("/register", postRegister)
-  .get("/users", gteUsersList);
+  .post("/users", postCreate)
+  .get("/users", authMiddleware, getUsersList)
+  .get("/users/:id", authMiddleware, getUser)
+  .put("/users/:id", authMiddleware, postupdateUser)
+  .delete("/users/:id", authMiddleware, delUser);
 
 app.addEventListener("error", (evt) => {
   console.log(evt.error);

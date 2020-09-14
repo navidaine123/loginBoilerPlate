@@ -12,7 +12,7 @@ import {
 import * as bcrypt from "https://deno.land/x/bcrypt@v0.2.4/mod.ts";
 import regiterResponseDto from "./dto/register.response.dto.ts";
 import { User } from "../model/userModel.ts";
-import usersListDto from "./dto/usersList.dto.ts";
+import userDto from "./dto/user.dto.ts";
 
 const key = "your-secret";
 const header: Jose = {
@@ -32,6 +32,7 @@ export const login = async (body: BodyFormData): Promise<loginResponseDto> => {
     jwt: null,
   };
   const user = await userRepo.getByusername(dto.UserName);
+
   if (!user) {
     responseDto = {
       message: "invalid",
@@ -58,7 +59,7 @@ export const login = async (body: BodyFormData): Promise<loginResponseDto> => {
   return responseDto;
 };
 
-export const register = async (
+export const createUser = async (
   body: BodyFormData,
 ): Promise<regiterResponseDto> => {
   const formdata = await (await body.value.read()).fields;
@@ -80,16 +81,28 @@ export const register = async (
   return responseDto;
 };
 
-export const usersList = async (): Promise<Array<usersListDto>> => {
-  const user = await userRepo.find(0);
-  console.log(user);
+export const user = async (id: string | undefined): Promise<userDto> => {
+  const user: User = await userRepo.find(id);
+
+  let userRes: userDto = {
+    id: user.id,
+    email: user.Email,
+    firstname: user.FirstName,
+    lastname: user.LastName,
+    usrename: user.UserName,
+  };
+
+  return userRes;
+};
+
+export const usersList = async (): Promise<Array<userDto>> => {
   const users = await userRepo.getAll();
 
-  let usersRes: usersListDto[] = [];
+  let usersRes: userDto[] = [];
 
   users.forEach((element) => {
-    const dto: usersListDto = {
-      id: element.Id,
+    const dto: userDto = {
+      id: element.id,
       firstname: element.FirstName,
       lastname: element.LastName,
       email: element.Email,
@@ -100,4 +113,43 @@ export const usersList = async (): Promise<Array<usersListDto>> => {
   });
 
   return usersRes;
+};
+
+export const updateUser = async (
+  id: string | undefined,
+  body: BodyFormData,
+): Promise<userDto> => {
+  const formdata = (await body.value.read()).fields;
+
+  const user: User = await userRepo.find(id);
+  console.log(user);
+  user.FirstName = (formdata).firstname;
+  user.LastName = (formdata).lastname;
+  user.UserName = (formdata).username;
+  user.Email = (formdata).email;
+  // const salt = await bcrypt.genSalt(15);
+  // user.Password = await bcrypt.hash((formdata).password, salt);
+
+  await userRepo.update(user);
+
+  const userRes: userDto = {
+    id: user.id,
+    email: user.Email,
+    firstname: user.FirstName,
+    lastname: user.LastName,
+    usrename: user.UserName,
+  };
+  return userRes;
+};
+
+export const deleteUser = async (id: string | undefined): Promise<boolean> => {
+  try {
+    const user = await userRepo.find(id);
+
+    await userRepo.delete(user);
+
+    return true;
+  } catch (error) {
+    return false;
+  }
 };

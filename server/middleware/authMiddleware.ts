@@ -6,19 +6,16 @@ import {
   Payload,
 } from "https://deno.land/x/djwt/validate.ts";
 
-const userMiddleware = async (
+const authMiddleware = async (
   ctx: Context<httpContextState>,
   next: Function,
 ) => {
   const jwt = ctx.request.headers.get("Authorization")?.split("Bearer ")[1];
-  console.log(jwt);
   if (jwt) {
     const validate = await validateJwt(
       { jwt, key: "your-secret", algorithm: "HS256" },
     );
     const data = parseAndDecode(validate.jwt + "");
-
-    console.log(data);
 
     const jwtpayload = data.payload as jwtPayload;
     if (data) {
@@ -33,7 +30,7 @@ const userMiddleware = async (
     ctx.state.currentUser = null;
   }
 };
-export default userMiddleware;
+export default authMiddleware;
 
 interface jwtPayload extends httpContextUser {
   exp: number;

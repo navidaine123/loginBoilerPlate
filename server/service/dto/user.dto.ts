@@ -1,4 +1,4 @@
-interface usersListDto {
+interface userDto {
   id: string;
   lastname: string;
   firstname: string;
@@ -6,4 +6,4 @@ interface usersListDto {
   email: string;
 }
 
-export default usersListDto;
+export default userDto;

@@ -5,19 +5,17 @@ import {
 export class GenericRepository<T extends Model> {
   protected dbSet: typeof Model;
 
-  constructor(private classRef: typeof Model) {
-    this.dbSet = classRef;
+  constructor(private dataSet: typeof Model) {
+    this.dbSet = dataSet;
   }
 
   create = async (entity: T): Promise<T> => await entity.save();
 
-  edit = async (entity: T): Promise<T> => await entity.update();
+  update = async (entity: T): Promise<T> => await entity.update();
 
   delete = async (entity: T): Promise<void> => await entity.delete();
 
-  find = async (key: any): Promise<T> => {
-    return await this.classRef.find(key);
-  };
+  find = async (key: any): Promise<T> => await this.dataSet.find(key);
 
-  getAll = async (): Promise<Array<T>> => await this.classRef.all();
+  getAll = async (): Promise<Array<T>> => await this.dataSet.all();
 }

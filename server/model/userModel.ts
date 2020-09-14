@@ -5,7 +5,7 @@ export class User extends Model {
 
   static table = "User";
   static fields = {
-    Id: {
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -41,18 +41,18 @@ export class User extends Model {
     },
   };
 
-  Id!: string;
+  id!: string;
   FirstName!: string;
   LastName!: string;
   UserName!: string;
   Email!: string;
   Password!: string;
 
-  save = super.save;
+  // save = super.save;
 
-  update = super.update;
+  // update = super.update;
 
-  delete() {
-    return super.delete();
-  }
+  // delete() {
+  //   return super.delete();
+  // }
 }
