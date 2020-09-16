@@ -21,28 +21,22 @@ const header: Jose = {
 };
 
 const userRepo = new UserRepository(User);
-export const login = async (body: BodyFormData): Promise<loginResponseDto> => {
+export const login = async (body: BodyFormData): Promise<string> => {
   const formdata = await body.value.read();
   const dto: loginDto = {
-    UserName: formdata.fields.userName,
+    UserName: formdata.fields.username,
     Password: formdata.fields.password,
   };
-  let responseDto: loginResponseDto = {
-    message: "",
-    jwt: null,
-  };
+  let res = "";
   const user = await userRepo.getByusername(dto.UserName);
 
   if (!user) {
-    responseDto = {
-      message: "invalid",
-      jwt: null,
-    };
+    res = "notFound"
   } else if (!await bcrypt.compare(dto.Password, user.Password)) {
-    responseDto = {
-      message: "inavalid",
-      jwt: null,
-    };
+    console.log(dto.Password + '####' + dto.UserName);
+    console.log(await bcrypt.hash(dto.Password, user.Password.slice(0, 29)));
+    console.log(JSON.stringify(user))
+    res = "wrongPassword"
   } else {
     const payload: Payload = {
       iss: user.UserName,
@@ -51,12 +45,9 @@ export const login = async (body: BodyFormData): Promise<loginResponseDto> => {
       userName: user.UserName,
     };
     const jwt = await makeJwt({ key, header, payload });
-    responseDto = {
-      message: "succes",
-      jwt: jwt,
-    };
+    res = jwt;
   }
-  return responseDto;
+  return res;
 };
 
 export const createUser = async (
@@ -69,9 +60,9 @@ export const createUser = async (
   newuser.FirstName = (formdata).firstname;
   newuser.UserName = (formdata).username;
   newuser.Email = (formdata).email;
-  const salt = await bcrypt.genSalt(15);
+  const salt = await bcrypt.genSalt(12);
   newuser.Password = await bcrypt.hash((formdata).password, salt);
-
+  console.log(JSON.stringify(formdata))
   const res = await userRepo.create(newuser);
 
   let responseDto: regiterResponseDto = {

@@ -18,10 +18,12 @@ import {
 
 import authMiddleware from "./middleware/authMiddleware.ts";
 import { createDB } from "./database/posgresql.ts";
+import { oakCors } from "https://deno.land/x/cors/mod.ts";
 
 const app = new Application();
 const router = new Router();
 
+app.use(oakCors()); // Enable CORS for All Routes
 app.use(router.routes());
 app.use(router.allowedMethods());
 

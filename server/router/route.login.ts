@@ -11,8 +11,23 @@ export const getLogin = async (ctx: RouterContext) => {
 export const postLogin = async (ctx: RouterContext) => {
   const body = await ctx.request.body({ type: "form-data" });
   // ctx.response.body = (await body.value.read()).fields;
-  ctx.response.body = {
-    status: 200,
-    data: await login(body),
-  };
+  const res = await login(body);
+  switch (res) {
+    case "notFound": {
+      ctx.response.status = 404;
+      break;
+    }
+    case "wrongPassword": {
+      ctx.response.status = 401;
+      break;
+    }
+    default: {
+      ctx.response.status = 200;
+      ctx.response.body = {
+        jwt: res
+      }
+      break;
+    }
+
+  }
 };
